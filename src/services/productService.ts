@@ -1,6 +1,6 @@
 import { Product } from "../types";
 
-const LOCAL_API_URL = import.meta.env.VITE_LOCAL_API_URL;
+const API_URL = import.meta.env.VITE_LOCAL_API_URL || "http://localhost:3001";
 
 /**
  * Fetches products from the backend API based on provided product IDs
@@ -13,13 +13,18 @@ export const fetchProducts = async (
 	try {
 		// Create a comma-separated string of product IDs
 		const idsParam = productIds.join(",");
-		const response = await fetch(`${LOCAL_API_URL}/products?ids=${idsParam}`);
+		console.log(`Fetching products from: ${API_URL}/products?ids=${idsParam}`);
+
+		const response = await fetch(`${API_URL}/products?ids=${idsParam}`);
 
 		if (!response.ok) {
-			throw new Error("Failed to fetch products");
+			throw new Error(
+				`Failed to fetch products: ${response.status} ${response.statusText}`
+			);
 		}
 
 		const data = await response.json();
+		console.log(`Successfully fetched ${data.length} products`);
 		return data || [];
 	} catch (error) {
 		console.error("Error fetching products:", error);

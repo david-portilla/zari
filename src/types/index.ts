@@ -14,7 +14,7 @@ export interface Product {
 /**
  * Defines possible alignment templates for product rows
  */
-export type RowAlignment = "left" | "center" | "right";
+export type RowAlignment = "LEFT" | "CENTER" | "RIGHT";
 
 /**
  * Represents a row in the product grid

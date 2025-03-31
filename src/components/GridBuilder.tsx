@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
 import { v4 as uuidv4 } from "uuid";
-import { Product, ProductRow } from "../types";
+import { Product, ProductRow, RowAlignment } from "../types";
 import { fetchProducts } from "../services/productService";
 import ProductRowComponent from "./ProductRow";
 
@@ -75,13 +75,24 @@ export const GridBuilder: React.FC = () => {
 				initialRows.push({
 					id: uuidv4(),
 					products: [...currentRow],
-					template: "left", // Default template
+					template: "LEFT", // Default template
 				});
 				currentRow = [];
 			}
 		});
 
 		setRows(initialRows);
+	};
+
+	/**
+	 * Updates the template/alignment for a specific row
+	 * @param rowId - ID of the row to update
+	 * @param template - New template alignment to apply
+	 */
+	const updateRowTemplate = (rowId: string, template: RowAlignment) => {
+		setRows((prevRows) =>
+			prevRows.map((row) => (row.id === rowId ? { ...row, template } : row))
+		);
 	};
 
 	if (loading) {
@@ -108,7 +119,12 @@ export const GridBuilder: React.FC = () => {
 
 				<div className="grid-builder">
 					{rows.map((row) => (
-						<ProductRowComponent key={row.id} row={row} />
+						<div key={row.id} className="mb-8">
+							<ProductRowComponent
+								row={row}
+								onTemplateChange={updateRowTemplate}
+							/>
+						</div>
 					))}
 				</div>
 			</div>
