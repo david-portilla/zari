@@ -13,7 +13,6 @@ export const fetchProducts = async (
 	try {
 		// Create a comma-separated string of product IDs
 		const idsParam = productIds.join(",");
-		console.log(`Fetching products from: ${API_URL}/products?ids=${idsParam}`);
 
 		const response = await fetch(`${API_URL}/products?ids=${idsParam}`);
 
@@ -24,7 +23,6 @@ export const fetchProducts = async (
 		}
 
 		const data = await response.json();
-		console.log(`Successfully fetched ${data.length} products`);
 		return data || [];
 	} catch (error) {
 		console.error("Error fetching products:", error);
