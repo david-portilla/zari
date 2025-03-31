@@ -1,0 +1,8 @@
+---
+description: 
+globs: *.tsx
+alwaysApply: false
+---
+- Haz la documentacion en ingles
+- Utiliza JsDoc para la documentacion del codigo
+- Para cada funcion genera docstrings
