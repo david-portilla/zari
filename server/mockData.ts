@@ -88,6 +88,42 @@ export const products: Product[] = [
 			currency: "EUR",
 		},
 	},
+	{
+		id: "prod_007",
+		name: "Blue Jean",
+		image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400",
+		price: {
+			amount: 36.87,
+			currency: "EUR",
+		},
+	},
+	{
+		id: "prod_008",
+		name: "Backpack",
+		image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400",
+		price: {
+			amount: 49.95,
+			currency: "EUR",
+		},
+	},
+	{
+		id: "prod_009",
+		name: "Watch",
+		image: "https://images.unsplash.com/photo-1614164185128-e4ec99c436d7?w=400",
+		price: {
+			amount: 125.0,
+			currency: "EUR",
+		},
+	},
+	{
+		id: "prod_010",
+		name: "Sneakers",
+		image: "https://images.unsplash.com/photo-1597045566677-8cf032ed6634?w=400",
+		price: {
+			amount: 75.5,
+			currency: "EUR",
+		},
+	},
 ];
 
 // Mock Templates
