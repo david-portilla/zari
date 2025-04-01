@@ -68,7 +68,7 @@ cp .env.example .env
 Update the `.env` file with:
 
 ```
-VITE_API_URL=http://localhost:3001
+VITE_LOCAL_API_URL=http://localhost:3001
 ```
 
 4. Start the development server:
@@ -124,7 +124,7 @@ The application will be available at `http://localhost:5173`
 
 ### Frontend URLs
 
-The application accepts query parameters to initialize the grid:
+The application accepts query parameters to initialize the grid. Using the value of `VITE_LOCAL_API_URL` (default: `http://localhost:5173`):
 
 ```
 http://localhost:5173/?productIds=prod_001,prod_002,prod_003&rows=2
