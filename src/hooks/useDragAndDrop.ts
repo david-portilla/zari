@@ -14,6 +14,7 @@ interface UseDragAndDropProps {
 
 /**
  * Custom hook to handle drag and drop functionality for products between rows
+ * and for reordering products within a row
  * @param rows - Current array of product rows
  * @param onUpdateRows - Callback to update rows when changes occur
  * @returns Object containing drag state and handlers for product drag and drop
@@ -39,7 +40,7 @@ export const useDragAndDrop = ({ rows, onUpdateRows }: UseDragAndDropProps) => {
 	};
 
 	/**
-	 * Handles the end of a product drag operation
+	 * Handles the end of a drag operation, resetting the drag state
 	 */
 	const handleDragEnd = () => {
 		setDragState({
@@ -61,39 +62,120 @@ export const useDragAndDrop = ({ rows, onUpdateRows }: UseDragAndDropProps) => {
 	/**
 	 * Handles dropping a product into a row
 	 * @param targetRowId - The ID of the row where the product is being dropped
+	 * @param targetPosition - Optional index position within the row to place the product
 	 */
-	const handleDrop = (targetRowId: string) => {
+	const handleDrop = (targetRowId: string, targetPosition?: number) => {
 		if (!dragState.draggedProduct || !dragState.sourceRowId) return;
 
-		// If dropping in the same row, do nothing
-		if (targetRowId === dragState.sourceRowId) {
+		const sourceRowId = dragState.sourceRowId;
+		const draggedProduct = dragState.draggedProduct;
+
+		// If dropping in the same row and no target position, do nothing and reset
+		if (targetRowId === sourceRowId && targetPosition === undefined) {
 			handleDragEnd();
 			return;
 		}
 
-		// Find target row
-		const targetRow = rows.find((row) => row.id === targetRowId);
-		if (!targetRow || targetRow.products.length >= 3) return;
+		const updatedRows = [...rows];
 
-		const draggedProduct = dragState.draggedProduct;
+		// Find source and target row indexes
+		const sourceRowIndex = updatedRows.findIndex(
+			(row) => row.id === sourceRowId
+		);
+		const targetRowIndex = updatedRows.findIndex(
+			(row) => row.id === targetRowId
+		);
 
-		const updatedRows = rows.map((row) => {
-			// Remove product from source row
-			if (row.id === dragState.sourceRowId) {
-				return {
-					...row,
-					products: row.products.filter((p) => p.id !== draggedProduct.id),
+		if (sourceRowIndex === -1 || targetRowIndex === -1) {
+			handleDragEnd();
+			return;
+		}
+
+		// Same row reordering
+		if (targetRowId === sourceRowId && targetPosition !== undefined) {
+			const rowProducts = [...updatedRows[sourceRowIndex].products];
+
+			// Validate target position
+			if (targetPosition < 0 || targetPosition > rowProducts.length) {
+				handleDragEnd();
+				return;
+			}
+
+			// Find the position of the dragged product
+			const currentPosition = rowProducts.findIndex(
+				(p) => p.id === draggedProduct.id
+			);
+			if (currentPosition === -1) {
+				handleDragEnd();
+				return;
+			}
+
+			// If dropping in the same position, do nothing
+			if (currentPosition === targetPosition) {
+				handleDragEnd();
+				return;
+			}
+
+			// Remove from current position
+			const [productToMove] = rowProducts.splice(currentPosition, 1);
+
+			// If target position is after current position, we need to adjust it
+			// because the array length changed after removal
+			let finalPosition = targetPosition;
+			if (targetPosition > currentPosition) {
+				finalPosition = targetPosition - 1;
+			}
+
+			// Insert at new position
+			rowProducts.splice(finalPosition, 0, productToMove);
+
+			// Update the row
+			updatedRows[sourceRowIndex] = {
+				...updatedRows[sourceRowIndex],
+				products: rowProducts,
+			};
+		}
+		// Moving between different rows
+		else {
+			// Verify target row has capacity
+			if (updatedRows[targetRowIndex].products.length >= 3) {
+				handleDragEnd();
+				return;
+			}
+
+			// Remove from source row
+			updatedRows[sourceRowIndex] = {
+				...updatedRows[sourceRowIndex],
+				products: updatedRows[sourceRowIndex].products.filter(
+					(p) => p.id !== draggedProduct.id
+				),
+			};
+
+			// Add to target row at specific position or at the end
+			if (targetPosition !== undefined) {
+				// Validate target position
+				if (
+					targetPosition < 0 ||
+					targetPosition > updatedRows[targetRowIndex].products.length
+				) {
+					handleDragEnd();
+					return;
+				}
+
+				const targetProducts = [...updatedRows[targetRowIndex].products];
+				targetProducts.splice(targetPosition, 0, draggedProduct);
+				updatedRows[targetRowIndex] = {
+					...updatedRows[targetRowIndex],
+					products: targetProducts,
+				};
+			} else {
+				// Add to the end of target row
+				updatedRows[targetRowIndex] = {
+					...updatedRows[targetRowIndex],
+					products: [...updatedRows[targetRowIndex].products, draggedProduct],
 				};
 			}
-			// Add product to target row
-			if (row.id === targetRowId) {
-				return {
-					...row,
-					products: [...row.products, draggedProduct],
-				};
-			}
-			return row;
-		});
+		}
 
 		onUpdateRows(updatedRows);
 		handleDragEnd();

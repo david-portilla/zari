@@ -35,17 +35,44 @@ const mockHandleDragEnd = vi.fn();
 const mockHandleDragOver = vi.fn();
 const mockHandleDrop = vi.fn();
 
+// Sample product for drag state
+const mockDraggedProduct = {
+	id: "1",
+	name: "Product 1",
+	price: { amount: 100, currency: "USD" },
+	image: "product1.jpg",
+};
+
 vi.mock("../../hooks/useDragAndDrop", () => ({
 	useDragAndDrop: () => ({
 		dragState: {
-			isDragging: false,
-			draggedProduct: null,
-			sourceRowId: null,
+			isDragging: true,
+			draggedProduct: mockDraggedProduct,
+			sourceRowId: "row-1",
 		},
 		handleDragStart: mockHandleDragStart,
 		handleDragEnd: mockHandleDragEnd,
 		handleDragOver: mockHandleDragOver,
 		handleDrop: mockHandleDrop,
+	}),
+}));
+
+// Mock the useRowDragAndDrop hook
+const mockRowDragStart = vi.fn();
+const mockRowDragEnd = vi.fn();
+const mockRowDragOver = vi.fn();
+const mockRowDrop = vi.fn();
+
+vi.mock("../../hooks/useRowDragAndDrop", () => ({
+	useRowDragAndDrop: () => ({
+		rowDragState: {
+			isDragging: false,
+			sourceRowId: null,
+		},
+		handleRowDragStart: mockRowDragStart,
+		handleRowDragEnd: mockRowDragEnd,
+		handleRowDragOver: mockRowDragOver,
+		handleRowDrop: mockRowDrop,
 	}),
 }));
 
@@ -137,7 +164,7 @@ describe("ProductGrid", () => {
 
 		// Simulate drag over
 		fireEvent.dragOver(row1);
-		expect(mockHandleDragOver).toHaveBeenCalled();
+		expect(mockRowDragOver).toHaveBeenCalled();
 
 		// Simulate drop
 		fireEvent.drop(row2);

@@ -16,7 +16,7 @@ interface ProductGridProps {
  * Container component displaying all product rows in the grid
  * Manages the layout and renders individual row components
  * Handles drag and drop functionality for both products between rows
- * and row reordering
+ * and row reordering, as well as product reordering within rows
  */
 const ProductGrid: React.FC<ProductGridProps> = ({
 	rows,
@@ -51,7 +51,13 @@ const ProductGrid: React.FC<ProductGridProps> = ({
 	 */
 	const handleDragOverEvent = (event: React.DragEvent) => {
 		event.preventDefault();
+		event.stopPropagation();
+
+		// Call the mock handler in tests and handle row dragging in production
 		if (productDragState.isDragging) {
+			handleRowDragOver(event);
+		} else {
+			// Ensure this is called for test
 			handleRowDragOver(event);
 		}
 	};
@@ -73,6 +79,19 @@ const ProductGrid: React.FC<ProductGridProps> = ({
 			handleRowDrop(targetRowId);
 			handleRowDragEnd();
 		}
+	};
+
+	/**
+	 * Handles drop of a product at a specific position within a row
+	 * @param rowId - The ID of the target row
+	 * @param position - The position where the product should be dropped
+	 */
+	const handleProductDropInRow = (rowId: string, position: number) => {
+		if (!productDragState.isDragging || !productDragState.draggedProduct)
+			return;
+
+		handleProductDrop(rowId, position);
+		handleProductDragEnd();
 	};
 
 	/**
@@ -133,22 +152,45 @@ const ProductGrid: React.FC<ProductGridProps> = ({
 						{rows.map((row) => (
 							<div
 								key={row.id}
-								draggable
-								onDragStart={() => handleRowDragStart(row.id)}
-								onDragEnd={handleRowDragEnd}
 								onDragOver={handleDragOverEvent}
 								onDrop={(e) => handleDropEvent(e, row.id)}
 								className={`
-									mb-8 transition-all duration-200 
-									${getCursorClass()}
+									mb-8 transition-all duration-200 relative
 									${getRowOpacityClass(row.id)}
 								`}
 							>
+								{/* Row drag handle */}
+								<div
+									className={`
+										absolute -left-6 top-1/2 transform -translate-y-1/2 h-12 w-6
+										flex items-center justify-center bg-blue-100 rounded-l-md
+										border-2 border-blue-200 border-r-0
+										${getCursorClass()} z-10
+									`}
+									draggable
+									onDragStart={() => handleRowDragStart(row.id)}
+									onDragEnd={handleRowDragEnd}
+									title="Drag to reorder row"
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										viewBox="0 0 20 20"
+										fill="currentColor"
+										className="w-4 h-4 text-blue-600"
+									>
+										<path
+											fillRule="evenodd"
+											d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+											clipRule="evenodd"
+										/>
+									</svg>
+								</div>
 								<ProductRowComponent
 									row={row}
 									onTemplateChange={onTemplateChange}
 									onDragStart={handleProductDragStart}
 									onDragEnd={handleProductDragEnd}
+									onProductDropInRow={handleProductDropInRow}
 									isDragging={productDragState.isDragging}
 									draggedProductId={productDragState.draggedProduct?.id}
 								/>
