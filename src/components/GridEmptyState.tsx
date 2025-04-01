@@ -5,7 +5,10 @@ import React from "react";
  */
 const GridEmptyState: React.FC = () => {
 	return (
-		<div className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200">
+		<div
+			className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200"
+			data-testid="grid-empty-state"
+		>
 			<div className="text-gray-400 text-4xl mb-4">
 				<span role="img" aria-label="Empty box">
 					📦

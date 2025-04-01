@@ -30,26 +30,31 @@ export const GridBuilder: React.FC = () => {
 
 	// Handle error states
 	if (paramError) {
-		return <GridErrorState message={paramError} />;
+		return (
+			<GridErrorState message={paramError} data-testid="grid-error-state" />
+		);
 	}
 
 	if (isLoading) {
-		return <GridLoadingState />;
+		return <GridLoadingState data-testid="grid-loading-state" />;
 	}
 
 	if (apiError) {
-		return <GridErrorState message={apiError} />;
+		return <GridErrorState message={apiError} data-testid="grid-error-state" />;
 	}
 
 	if (!isLoading && !isFetching && products.length === 0) {
-		return <GridEmptyState />;
+		return <GridEmptyState data-testid="grid-empty-state" />;
 	}
 
 	return (
-		<main>
+		<main data-testid="grid-builder">
 			<div className="max-w-5xl mx-auto">
 				{isFetching && !isLoading && (
-					<div className="bg-blue-50 text-blue-600 text-center py-2 mb-4 rounded-md">
+					<div
+						className="bg-blue-50 text-blue-600 text-center py-2 mb-4 rounded-md"
+						data-testid="updating-banner"
+					>
 						Updating products...
 					</div>
 				)}
@@ -60,8 +65,13 @@ export const GridBuilder: React.FC = () => {
 					rowCount={rows.length}
 					specifiedRowCount={rowCount}
 					hasLimitedProducts={hasLimitedProducts}
+					data-testid="grid-stats"
 				/>
-				<ProductGrid rows={rows} onTemplateChange={updateRowTemplate} />
+				<ProductGrid
+					rows={rows}
+					onTemplateChange={updateRowTemplate}
+					data-testid="product-grid"
+				/>
 			</div>
 		</main>
 	);

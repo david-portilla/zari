@@ -16,7 +16,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
 	onTemplateChange,
 }) => {
 	return (
-		<div className="grid-builder">
+		<div className="space-y-4" data-testid="product-grid">
 			{rows.map((row) => (
 				<div key={row.id} className="mb-8">
 					<ProductRowComponent row={row} onTemplateChange={onTemplateChange} />
