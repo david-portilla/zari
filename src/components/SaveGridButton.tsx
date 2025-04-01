@@ -7,7 +7,7 @@ interface SaveGridButtonProps {
 }
 
 /**
- * Button component that handles saving the grid
+ * Button component that handles saving the grid with Zara-inspired minimal design
  * Opens a modal for naming the grid and displays validation errors
  *
  * @param rows - The rows to save
@@ -90,11 +90,15 @@ const SaveGridButton: React.FC<SaveGridButtonProps> = ({ rows }) => {
 		if (validationErrors.length === 0) return null;
 
 		return (
-			<div className="mt-4 text-red-500 text-sm">
-				<p className="font-medium mb-1">Please fix the following issues:</p>
-				<ul className="list-disc pl-5">
+			<div className="mt-5 text-xs">
+				<p className="uppercase tracking-wider mb-2">
+					Please fix the following issues:
+				</p>
+				<ul className="space-y-1">
 					{validationErrors.map((err, index) => (
-						<li key={index}>{err}</li>
+						<li key={index} className="font-light">
+							{err}
+						</li>
 					))}
 				</ul>
 			</div>
@@ -108,8 +112,10 @@ const SaveGridButton: React.FC<SaveGridButtonProps> = ({ rows }) => {
 		if (!showSuccessMessage || !savedGrid) return null;
 
 		return (
-			<div className="mt-4 text-green-600 text-sm">
-				<p>Grid "{savedGrid.name}" saved successfully!</p>
+			<div className="mt-5 text-xs">
+				<p className="uppercase tracking-wider">
+					Grid "{savedGrid.name}" saved successfully.
+				</p>
 			</div>
 		);
 	};
@@ -118,7 +124,7 @@ const SaveGridButton: React.FC<SaveGridButtonProps> = ({ rows }) => {
 		<>
 			<button
 				onClick={handleOpenModal}
-				className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors"
+				className="px-6 py-1.5 border border-black text-xs uppercase tracking-wider hover:bg-black hover:text-white transition-colors duration-200"
 				disabled={isLoading}
 			>
 				{isLoading ? "Saving..." : "Save Grid"}
@@ -126,53 +132,53 @@ const SaveGridButton: React.FC<SaveGridButtonProps> = ({ rows }) => {
 
 			{/* Modal overlay */}
 			{isModalOpen && (
-				<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-					<div className="bg-white rounded-lg p-6 max-w-md w-full">
-						<h2 className="text-xl font-bold mb-4">Save Grid</h2>
+				<div className="fixed inset-0 bg-white bg-opacity-95 flex items-center justify-center z-50">
+					<div className="w-full max-w-md p-8">
+						<h2 className="text-base uppercase tracking-wider font-light mb-8 text-center">
+							Save Grid
+						</h2>
 
-						<div className="mb-4">
+						<div className="mb-6">
 							<label
 								htmlFor="gridName"
-								className="block text-sm font-medium text-gray-700 mb-1"
+								className="block text-xs uppercase tracking-wider mb-3"
 							>
-								Grid Name
+								Name
 							</label>
 							<input
 								type="text"
 								id="gridName"
 								value={gridName}
 								onChange={handleNameChange}
-								className={`w-full px-3 py-2 border rounded-md ${
-									nameError ? "border-red-500" : "border-gray-300"
-								} focus:outline-none focus:ring-2 focus:ring-blue-500`}
+								className={`w-full px-3 py-2 border ${
+									nameError ? "border-black" : "border-gray-200"
+								} focus:outline-none focus:border-black text-sm`}
 								placeholder="Enter a name for your grid"
 							/>
-							{nameError && (
-								<p className="mt-1 text-sm text-red-500">{nameError}</p>
-							)}
+							{nameError && <p className="mt-2 text-xs">{nameError}</p>}
 						</div>
 
 						{renderValidationErrors()}
-						{error && <p className="mt-2 text-sm text-red-500">{error}</p>}
+						{error && <p className="mt-5 text-xs">{error}</p>}
 						{renderSuccessMessage()}
 
-						<div className="mt-6 flex justify-end space-x-3">
+						<div className="mt-10 flex justify-between">
 							<button
 								onClick={handleCloseModal}
-								className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
-								disabled={isLoading}
+								className="px-6 py-1.5 text-xs uppercase tracking-wider hover:underline"
+								disabled={isLoading || showSuccessMessage}
 							>
 								Cancel
 							</button>
 							<button
 								onClick={handleSave}
 								disabled={isLoading || showSuccessMessage}
-								className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed"
+								className="px-6 py-1.5 border border-black text-xs uppercase tracking-wider hover:bg-black hover:text-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
 							>
 								{isLoading
 									? "Saving..."
 									: showSuccessMessage
-										? "Saved!"
+										? "Saved"
 										: "Save"}
 							</button>
 						</div>

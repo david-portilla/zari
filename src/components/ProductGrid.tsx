@@ -10,18 +10,18 @@ interface ProductGridProps {
 	rows: ProductRowType[];
 	onTemplateChange: (rowId: string, template: RowAlignment) => void;
 	onUpdateRows: (updatedRows: ProductRowType[]) => void;
+	"data-testid"?: string;
 }
 
 /**
- * Container component displaying all product rows in the grid
- * Manages the layout and renders individual row components
- * Handles drag and drop functionality for both products between rows
- * and row reordering, as well as product reordering within rows
+ * Container component displaying all product rows in a grid with Zara-inspired design
+ * Manages product placement and provides drag-and-drop functionality
  */
 const ProductGrid: React.FC<ProductGridProps> = ({
 	rows,
 	onTemplateChange,
 	onUpdateRows,
+	...props
 }) => {
 	const {
 		dragState: productDragState,
@@ -139,11 +139,11 @@ const ProductGrid: React.FC<ProductGridProps> = ({
 	};
 
 	return (
-		<div className="relative min-h-[50vh] bg-gray-50">
+		<div className="relative min-h-[60vh] bg-white" {...props}>
 			{/* Grid container with dynamic height */}
 			<div className="h-full overflow-x-auto" onWheel={handleWheel}>
 				{/* Zoom container with padding */}
-				<div className="p-8">
+				<div className="p-4">
 					{/* Grid content with zoom transform */}
 					<div
 						className="relative origin-top-left transition-transform duration-200 ease-in-out"
@@ -155,16 +155,15 @@ const ProductGrid: React.FC<ProductGridProps> = ({
 								onDragOver={handleDragOverEvent}
 								onDrop={(e) => handleDropEvent(e, row.id)}
 								className={`
-									mb-8 transition-all duration-200 relative
+									mb-12 transition-all duration-200 relative
 									${getRowOpacityClass(row.id)}
 								`}
 							>
 								{/* Row drag handle */}
 								<div
 									className={`
-										absolute -left-6 top-1/2 transform -translate-y-1/2 h-12 w-6
-										flex items-center justify-center bg-blue-100 rounded-l-md
-										border-2 border-blue-200 border-r-0
+										absolute -left-4 top-1/2 transform -translate-y-1/2 h-12 w-4
+										flex items-center justify-center border-l border-t border-b border-gray-200
 										${getCursorClass()} z-10
 									`}
 									draggable
@@ -176,7 +175,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
 										xmlns="http://www.w3.org/2000/svg"
 										viewBox="0 0 20 20"
 										fill="currentColor"
-										className="w-4 h-4 text-blue-600"
+										className="w-3 h-3 text-gray-400"
 									>
 										<path
 											fillRule="evenodd"

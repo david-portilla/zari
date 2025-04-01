@@ -181,7 +181,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
 	};
 
 	return (
-		<div className="border-2 border-dashed border-blue-200 p-4 rounded-lg bg-white">
+		<div className="border border-gray-100 shadow-sm p-4 bg-white">
 			<div
 				className={`flex gap-4 ${alignmentClass} relative`}
 				onDragOver={handleRowDragOver}
@@ -209,7 +209,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
 			<div className="mt-3 text-sm flex items-center">
 				<label
 					htmlFor={`template-${row.id}`}
-					className="font-medium mr-2 text-gray-600"
+					className="text-xs uppercase tracking-wider font-light mr-2"
 				>
 					Template:
 				</label>
@@ -217,7 +217,7 @@ const ProductRow: React.FC<ProductRowProps> = ({
 					id={`template-${row.id}`}
 					value={row.template || "LEFT"}
 					onChange={handleTemplateChange}
-					className="px-3 py-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
+					className="px-3 py-1.5 border border-gray-100 text-xs focus:outline-none focus:border-black"
 				>
 					<option value="LEFT">Left</option>
 					<option value="CENTER">Center</option>

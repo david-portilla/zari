@@ -10,8 +10,7 @@ import SaveGridButton from "./SaveGridButton";
 
 /**
  * Main component for building and managing the product grid
- * Orchestrates the different components and handles state transitions
- * Implements the Single Responsibility and Open/Closed principles of SOLID
+ * Uses a minimalist design inspired by Zara.com
  */
 export const GridBuilder: React.FC = () => {
 	const { productIds, rowCount, error: paramError } = useGridParams();
@@ -47,18 +46,18 @@ export const GridBuilder: React.FC = () => {
 	}
 
 	return (
-		<main data-testid="grid-builder">
-			<div className="max-w-5xl mx-auto">
+		<main data-testid="grid-builder" className="pt-4 pb-20">
+			<div className="max-w-screen-xl mx-auto px-6 md:px-8">
 				{isFetching && !isLoading && (
 					<div
-						className="bg-blue-50 text-blue-600 text-center py-2 mb-4 rounded-md"
+						className="text-[11px] uppercase tracking-wider text-center py-2 mb-6 font-light"
 						data-testid="updating-banner"
 					>
 						Updating products...
 					</div>
 				)}
 
-				<div className="flex justify-between items-center mb-6">
+				<div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12">
 					<GridStats
 						totalProducts={products.length}
 						displayedProducts={displayedProductCount}

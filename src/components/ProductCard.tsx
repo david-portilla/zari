@@ -12,7 +12,7 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 	return (
 		<div
-			className="bg-white rounded-lg shadow-md overflow-hidden"
+			className="bg-white border border-gray-100 shadow-sm overflow-hidden"
 			data-testid={`product-card-${product.id}`}
 		>
 			<img
@@ -21,8 +21,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 				className="w-full h-48 object-cover"
 			/>
 			<div className="p-4">
-				<h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
-				<p className="text-xl font-bold text-blue-600">
+				<h3 className="text-sm uppercase tracking-wider font-light text-gray-800">
+					{product.name}
+				</h3>
+				<p className="text-sm font-normal mt-2">
 					${product.price.amount.toFixed(2)}
 				</p>
 			</div>

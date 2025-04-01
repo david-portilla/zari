@@ -21,7 +21,7 @@ export const useGridParams = (): GridUrlParams => {
 
 	if (!productIdsParam) {
 		error =
-			"No product IDs specified in URL. <br> Suggested format: ?productIds=prod_001,prod_002,prod_003&rows=3...";
+			"No product IDs specified in URL. <br> Suggested format: ?productIds=prod_001,prod_002,prod_003,prod_004&rows=3...";
 	}
 
 	// Parse row count parameter

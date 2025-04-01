@@ -1,6 +1,15 @@
 # ZARI Store Grid Editor
 
-A modern React application for creating and managing product grid layouts with drag-and-drop functionality and dynamic row templates.
+<div align="center">
+  <img src=".github/Zari.png" alt="ZARI Store">
+  <h3>Customizable Grid Ecommerce</h3>
+  <p>A modern React application for creating and managing product grid layouts with drag-and-drop functionality and dynamic row templates.</p>
+  <p>
+    <a href="https://zari-store.davidportilla.com/" target="_blank" rel="noopener noreferrer">
+      <strong>🚀 View Live Demo »</strong>
+    </a>
+  </p>
+</div>
 
 ## Table of Contents
 
