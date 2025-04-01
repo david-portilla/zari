@@ -20,7 +20,8 @@ export const GridBuilder: React.FC = () => {
 	const {
 		products,
 		rows,
-		loading,
+		isLoading,
+		isFetching,
 		error: apiError,
 		displayedProductCount,
 		hasLimitedProducts,
@@ -32,7 +33,7 @@ export const GridBuilder: React.FC = () => {
 		return <GridErrorState message={paramError} />;
 	}
 
-	if (loading) {
+	if (isLoading) {
 		return <GridLoadingState />;
 	}
 
@@ -40,13 +41,19 @@ export const GridBuilder: React.FC = () => {
 		return <GridErrorState message={apiError} />;
 	}
 
-	if (products.length === 0) {
+	if (!isLoading && !isFetching && products.length === 0) {
 		return <GridEmptyState />;
 	}
 
 	return (
 		<main>
 			<div className="max-w-5xl mx-auto">
+				{isFetching && !isLoading && (
+					<div className="bg-blue-50 text-blue-600 text-center py-2 mb-4 rounded-md">
+						Updating products...
+					</div>
+				)}
+
 				<GridStats
 					totalProducts={products.length}
 					displayedProducts={displayedProductCount}

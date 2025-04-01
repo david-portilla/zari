@@ -1,11 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useMemo } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Product, ProductRow, RowAlignment } from "../types";
-import { fetchProducts } from "../services/productService";
+import { useProductsQuery } from "./useProductsQuery";
 
 /**
  * Custom hook for managing product grid state and operations
- * Handles product loading, row distribution, and template changes
+ * Uses TanStack Query for data fetching and state management
+ * Handles row distribution and template changes
  * @param productIds - Array of product IDs to fetch
  * @param specifiedRowCount - Optional number of rows to create
  * @returns State and operations for the product grid
@@ -14,14 +15,14 @@ export const useProductGrid = (
 	productIds: string[] | null,
 	specifiedRowCount: number | null
 ) => {
-	const [products, setProducts] = useState<Product[]>([]);
-	const [rows, setRows] = useState<ProductRow[]>([]);
-	const [loading, setLoading] = useState<boolean>(true);
-	const [error, setError] = useState<string | null>(null);
+	const {
+		data: products = [],
+		isLoading,
+		isFetching,
+		error: queryError,
+	} = useProductsQuery(productIds);
 
-	// Track previous prop values to avoid unnecessary re-fetches
-	const prevProductIdsRef = useRef<string[] | null>(null);
-	const prevRowCountRef = useRef<number | null>(null);
+	const [rows, setRows] = useState<ProductRow[]>([]);
 
 	// Constants for grid layout
 	const MIN_PRODUCTS_PER_ROW = 1;
@@ -142,49 +143,18 @@ export const useProductGrid = (
 		);
 	};
 
-	// Convert productIds array to string for stable dependency comparison
-	const productIdsString = productIds ? productIds.join(",") : "";
-
-	// Load products on component mount or when inputs change
-	useEffect(() => {
-		const loadProducts = async () => {
-			if (!productIds || productIds.length === 0) {
-				setError("No product IDs provided");
-				setLoading(false);
-				return;
-			}
-
-			setLoading(true);
-			setError(null);
-
-			try {
-				const fetchedProducts = await fetchProducts(productIds);
-				setProducts(fetchedProducts);
-
-				// Create initial row distribution
-				if (fetchedProducts.length > 0) {
-					const initialRows = distributeProductsIntoRows(
-						fetchedProducts,
-						specifiedRowCount
-					);
-					setRows(initialRows);
-				} else {
-					setRows([]);
-				}
-			} catch (err) {
-				setError("Failed to load products");
-				console.error(err);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		loadProducts();
-
-		// Update refs with current values
-		prevProductIdsRef.current = productIds ? [...productIds] : null;
-		prevRowCountRef.current = specifiedRowCount;
-	}, [productIdsString, specifiedRowCount]);
+	// Generate rows when products are loaded
+	useMemo(() => {
+		if (products.length > 0) {
+			const generatedRows = distributeProductsIntoRows(
+				products,
+				specifiedRowCount
+			);
+			setRows(generatedRows);
+		} else {
+			setRows([]);
+		}
+	}, [products, specifiedRowCount]);
 
 	// Calculate displayed vs total products
 	const displayedProductCount = rows.reduce(
@@ -193,10 +163,14 @@ export const useProductGrid = (
 	);
 	const hasLimitedProducts = displayedProductCount < products.length;
 
+	// Format error message
+	const error = queryError ? queryError.message : null;
+
 	return {
 		products,
 		rows,
-		loading,
+		isLoading,
+		isFetching,
 		error,
 		displayedProductCount,
 		hasLimitedProducts,
