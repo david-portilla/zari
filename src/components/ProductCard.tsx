@@ -6,23 +6,26 @@ interface ProductCardProps {
 }
 
 /**
- * Displays a product card with image, name and price
- * @param product - The product to display
+ * Displays a single product card with image, name, and price
+ * @param product - The product data to display
  */
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-	const { name, price, image } = product;
 	return (
-		<div className="border rounded-lg overflow-hidden shadow-md p-4 bg-white">
-			<div className="aspect-square overflow-hidden mb-2">
-				<img
-					src={image}
-					alt={name}
-					className="w-full h-full object-cover"
-					loading="lazy"
-				/>
+		<div
+			className="bg-white rounded-lg shadow-md overflow-hidden"
+			data-testid={`product-card-${product.id}`}
+		>
+			<img
+				src={product.image}
+				alt={product.name}
+				className="w-full h-48 object-cover"
+			/>
+			<div className="p-4">
+				<h3 className="text-lg font-semibold text-gray-800">{product.name}</h3>
+				<p className="text-xl font-bold text-blue-600">
+					${product.price.amount.toFixed(2)}
+				</p>
 			</div>
-			<h3 className="font-semibold text-lg truncate">{name}</h3>
-			<p className="text-gray-700 font-medium">${price.amount.toFixed(2)}</p>
 		</div>
 	);
 };

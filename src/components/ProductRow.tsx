@@ -1,19 +1,34 @@
 import React from "react";
-import { ProductRow as ProductRowType, RowAlignment } from "../types";
+import { Product, ProductRow as ProductRowType, RowAlignment } from "../types";
 import { ProductCard } from "./ProductCard";
 
 interface ProductRowProps {
 	row: ProductRowType;
 	onTemplateChange?: (rowId: string, template: RowAlignment) => void;
+	onDragStart: (product: Product, rowId: string) => void;
+	onDragEnd: () => void;
+	isDragging: boolean;
+	draggedProductId?: string;
 }
 
 /**
  * Displays a row of products with specified alignment
- * Handles rows with 1-3 products
+ * Handles rows with 1-3 products and drag and drop functionality
  * @param row - The row data containing products and template alignment
  * @param onTemplateChange - Callback for when template changes
+ * @param onDragStart - Callback for when drag starts
+ * @param onDragEnd - Callback for when drag ends
+ * @param isDragging - Whether a product is currently being dragged
+ * @param draggedProductId - ID of the product being dragged
  */
-const ProductRow: React.FC<ProductRowProps> = ({ row, onTemplateChange }) => {
+const ProductRow: React.FC<ProductRowProps> = ({
+	row,
+	onTemplateChange,
+	onDragStart,
+	onDragEnd,
+	isDragging,
+	draggedProductId,
+}) => {
 	// Determine the appropriate CSS class based on the template alignment
 	const getAlignmentClass = (alignment: RowAlignment | undefined): string => {
 		switch (alignment) {
@@ -61,7 +76,15 @@ const ProductRow: React.FC<ProductRowProps> = ({ row, onTemplateChange }) => {
 		<div className="border-2 border-dashed border-blue-200 p-4 rounded-lg bg-white">
 			<div className={`flex gap-4 ${alignmentClass}`}>
 				{row.products.map((product) => (
-					<div key={product.id} className={getCardWidthClass(productCount)}>
+					<div
+						key={product.id}
+						className={`${getCardWidthClass(productCount)} ${
+							isDragging && draggedProductId === product.id ? "opacity-50" : ""
+						}`}
+						draggable
+						onDragStart={() => onDragStart(product, row.id)}
+						onDragEnd={onDragEnd}
+					>
 						<ProductCard product={product} />
 					</div>
 				))}

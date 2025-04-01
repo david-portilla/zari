@@ -26,6 +26,7 @@ export const GridBuilder: React.FC = () => {
 		displayedProductCount,
 		hasLimitedProducts,
 		updateRowTemplate,
+		updateRows,
 	} = useProductGrid(productIds, rowCount);
 
 	// Handle error states
@@ -70,6 +71,7 @@ export const GridBuilder: React.FC = () => {
 				<ProductGrid
 					rows={rows}
 					onTemplateChange={updateRowTemplate}
+					onUpdateRows={updateRows}
 					data-testid="product-grid"
 				/>
 			</div>

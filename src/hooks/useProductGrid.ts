@@ -143,6 +143,14 @@ export const useProductGrid = (
 		);
 	};
 
+	/**
+	 * Updates the entire rows array, used for drag and drop operations
+	 * @param updatedRows - New array of rows to set
+	 */
+	const updateRows = (updatedRows: ProductRow[]) => {
+		setRows(updatedRows);
+	};
+
 	// Generate rows when products are loaded
 	useMemo(() => {
 		if (products.length > 0) {
@@ -175,5 +183,6 @@ export const useProductGrid = (
 		displayedProductCount,
 		hasLimitedProducts,
 		updateRowTemplate,
+		updateRows,
 	};
 };
