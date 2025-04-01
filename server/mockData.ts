@@ -1,9 +1,20 @@
 /**
  * Mock data for the ZARI store application
- * Contains products and templates information
+ * Contains type definitions and mock data for products, templates, and grids
+ *
+ * @module mockData
  */
 
-// Types
+/**
+ * Represents a product in the store
+ * @interface Product
+ * @property {string} id - Unique identifier for the product
+ * @property {string} name - Name of the product
+ * @property {string} image - URL of the product image
+ * @property {Object} price - Price information
+ * @property {number} price.amount - Price amount
+ * @property {string} price.currency - Currency code (e.g., EUR)
+ */
 export interface Product {
 	id: string;
 	name: string;
@@ -14,25 +25,50 @@ export interface Product {
 	};
 }
 
+/**
+ * Represents a template for row alignment
+ * @interface Template
+ * @property {string} id - Unique identifier for the template
+ * @property {string} name - Display name of the template
+ * @property {("LEFT"|"CENTER"|"RIGHT")} alignment - Alignment type for the row
+ */
 export interface Template {
 	id: string;
 	name: string;
 	alignment: "LEFT" | "CENTER" | "RIGHT";
 }
 
+/**
+ * Represents a grid configuration
+ * @interface Grid
+ * @property {string} id - Unique identifier for the grid
+ * @property {string} name - Display name of the grid
+ * @property {Row[]} rows - Array of rows in the grid
+ */
 export interface Grid {
 	id: string;
 	name: string;
 	rows: Row[];
 }
 
+/**
+ * Represents a row in a grid
+ * @interface Row
+ * @property {string} id - Unique identifier for the row
+ * @property {string} templateId - ID of the template to apply
+ * @property {string[]} products - Array of product IDs in the row (1-3 products)
+ */
 export interface Row {
 	id: string;
 	templateId: string;
 	products: string[]; // Product IDs
 }
 
-// Mock Products
+/**
+ * Mock product data
+ * Contains a variety of clothing and accessories
+ * @constant {Product[]}
+ */
 export const products: Product[] = [
 	{
 		id: "prod_001",
@@ -126,7 +162,11 @@ export const products: Product[] = [
 	},
 ];
 
-// Mock Templates
+/**
+ * Mock template data
+ * Defines available row alignment options
+ * @constant {Template[]}
+ */
 export const templates: Template[] = [
 	{
 		id: "template_001",
@@ -145,5 +185,9 @@ export const templates: Template[] = [
 	},
 ];
 
-// Mock Saved Grids
+/**
+ * Mock grids storage
+ * In-memory storage for saved grid configurations
+ * @constant {Grid[]}
+ */
 export const grids: Grid[] = [];

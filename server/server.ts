@@ -1,6 +1,8 @@
 /**
  * Express server for providing mock API endpoints for ZARI store
- * Implements the product and grid endpoints
+ * Implements RESTful endpoints for managing products, templates, and grid layouts
+ *
+ * @module server
  */
 
 import express, { Request, Response } from "express";
@@ -11,13 +13,19 @@ import { products, templates, grids, Grid } from "./mockData";
 const app = express();
 const PORT = 3001;
 
-// Middleware
+// Middleware configuration
 app.use(cors());
 app.use(express.json());
 
 /**
  * GET /products endpoint
  * Returns product information based on the provided IDs
+ *
+ * @route GET /products
+ * @param {string} ids - Query parameter containing product IDs (JSON array or comma-separated string)
+ * @returns {Product[]} Array of products matching the provided IDs
+ * @throws {400} If ids parameter is missing or invalid
+ * @throws {500} If server encounters an error
  */
 app.get("/products", (req: Request, res: Response) => {
 	try {
@@ -29,7 +37,7 @@ app.get("/products", (req: Request, res: Response) => {
 			});
 		}
 
-		// Parse the ids parameter (format "id1,id2,...")
+		// Parse the ids parameter (format "id1,id2,..." or JSON array)
 		let productIds: string[] = [];
 
 		try {
@@ -60,7 +68,11 @@ app.get("/products", (req: Request, res: Response) => {
 
 /**
  * GET /templates endpoint
- * Returns all available templates
+ * Returns all available templates for grid row alignment
+ *
+ * @route GET /templates
+ * @returns {Template[]} Array of all available templates
+ * @throws {500} If server encounters an error
  */
 app.get("/templates", (_req: Request, res: Response) => {
 	try {
@@ -73,7 +85,13 @@ app.get("/templates", (_req: Request, res: Response) => {
 
 /**
  * POST /grids endpoint
- * Saves a grid configuration
+ * Saves a new grid configuration
+ *
+ * @route POST /grids
+ * @param {Grid} body - Grid configuration without ID
+ * @returns {Grid} Created grid with generated ID
+ * @throws {400} If grid data is invalid or missing required fields
+ * @throws {500} If server encounters an error
  */
 app.post("/grids", (req: Request, res: Response) => {
 	try {
@@ -124,7 +142,11 @@ app.post("/grids", (req: Request, res: Response) => {
 
 /**
  * GET /grids endpoint
- * Returns all saved grids
+ * Returns all saved grid configurations
+ *
+ * @route GET /grids
+ * @returns {Grid[]} Array of all saved grids
+ * @throws {500} If server encounters an error
  */
 app.get("/grids", (_req: Request, res: Response) => {
 	try {
