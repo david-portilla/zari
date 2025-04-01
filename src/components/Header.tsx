@@ -11,7 +11,7 @@ export const Header = () => {
 			<div className="max-w-screen-xl mx-auto px-8">
 				<div className="flex justify-between items-center">
 					<div className="w-44">
-						<Link to="/?productIds=prod_001,prod_002,prod_003&rows=2">
+						<Link to="/?productIds=prod_001,prod_002,prod_003&rows=3">
 							<img src={zariLogo} alt="ZARI" className="w-full" />
 						</Link>
 					</div>

@@ -87,6 +87,7 @@ describe("GridBuilder Integration", () => {
 			displayedProductCount: 0,
 			hasLimitedProducts: false,
 			updateRowTemplate: vi.fn(),
+			updateRows: vi.fn(),
 		});
 
 		render(<GridBuilder />, { wrapper });
@@ -130,6 +131,7 @@ describe("GridBuilder Integration", () => {
 			displayedProductCount: 0,
 			hasLimitedProducts: false,
 			updateRowTemplate: vi.fn(),
+			updateRows: vi.fn(),
 		});
 
 		const { rerender } = render(<GridBuilder />, { wrapper });
@@ -145,6 +147,7 @@ describe("GridBuilder Integration", () => {
 			displayedProductCount: 1,
 			hasLimitedProducts: false,
 			updateRowTemplate: vi.fn(),
+			updateRows: vi.fn(),
 		});
 
 		rerender(<GridBuilder />);
@@ -171,6 +174,7 @@ describe("GridBuilder Integration", () => {
 			displayedProductCount: 0,
 			hasLimitedProducts: false,
 			updateRowTemplate: vi.fn(),
+			updateRows: vi.fn(),
 		});
 
 		render(<GridBuilder />, { wrapper });
@@ -203,6 +207,7 @@ describe("GridBuilder Integration", () => {
 			displayedProductCount: 1,
 			hasLimitedProducts: false,
 			updateRowTemplate: vi.fn(),
+			updateRows: vi.fn(),
 		});
 
 		render(<GridBuilder />, { wrapper });
