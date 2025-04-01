@@ -1,39 +1,50 @@
 import React from "react";
 
 /**
- * Displays a message when no products are found
+ * Properties for the GridEmptyState component
  */
-const GridEmptyState: React.FC = () => {
+interface GridEmptyStateProps {
+	"data-testid"?: string;
+}
+
+/**
+ * Displays an empty state message when no products are available
+ * Provides instructions for loading products
+ */
+const GridEmptyState: React.FC<GridEmptyStateProps> = (props) => {
+	const apiUrl = import.meta.env.VITE_LOCAL_API_URL || "http://localhost:3001";
+
 	return (
 		<div
-			className="text-center py-12 bg-gray-50 rounded-lg border border-gray-200"
-			data-testid="grid-empty-state"
+			className="text-center py-16 border-2 border-dashed border-gray-300 rounded-lg"
+			{...props}
 		>
-			<div className="text-gray-400 text-4xl mb-4">
-				<span role="img" aria-label="Empty box">
-					📦
-				</span>
-			</div>
-			<h3 className="text-lg font-medium text-gray-700 mb-2">
+			<h2 className="text-2xl font-bold text-gray-700 mb-3">
 				No Products Found
-			</h3>
-			<p className="text-gray-500 mb-4">
-				No products were found with the specified IDs.
+			</h2>
+			<p className="text-gray-500 mb-6 max-w-md mx-auto">
+				Add product IDs as URL parameters to start building your grid.
 			</p>
 
-			<p className="text-gray-500">
-				Please check that server is running and that the product IDs are
-				correct.
-				<br />
+			<div className="mb-8">
+				<p className="font-medium text-gray-600 mb-2">Example URL:</p>
+				<code className="bg-gray-100 px-3 py-2 rounded-md text-sm break-all">
+					<a
+						href={`${apiUrl}/products?ids=prod_001,prod_002,prod_003`}
+						className="text-blue-600 hover:underline"
+						target="_blank"
+						rel="noreferrer"
+					>
+						{apiUrl}/products?ids=prod_001,prod_002,prod_003
+					</a>
+				</code>
+			</div>
+
+			<p className="text-gray-500 text-sm max-w-md mx-auto">
+				You can also specify the number of rows by adding the{" "}
+				<code className="bg-gray-100 px-1.5 py-0.5 rounded-sm">rows</code>{" "}
+				parameter.
 			</p>
-			<a
-				className="text-blue-500"
-				href="http://localhost:3001/products?ids=prod_001,prod_002,prod_003"
-				target="_blank"
-				rel="noopener noreferrer"
-			>
-				Example: http://localhost:3001/products?ids=prod_001,prod_002,prod_003
-			</a>
 		</div>
 	);
 };

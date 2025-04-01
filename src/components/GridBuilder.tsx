@@ -6,6 +6,7 @@ import ProductGrid from "./ProductGrid";
 import GridLoadingState from "./GridLoadingState";
 import GridErrorState from "./GridErrorState";
 import GridEmptyState from "./GridEmptyState";
+import SaveGridButton from "./SaveGridButton";
 
 /**
  * Main component for building and managing the product grid
@@ -13,10 +14,8 @@ import GridEmptyState from "./GridEmptyState";
  * Implements the Single Responsibility and Open/Closed principles of SOLID
  */
 export const GridBuilder: React.FC = () => {
-	// Parse URL parameters
 	const { productIds, rowCount, error: paramError } = useGridParams();
 
-	// Initialize grid state with parsed parameters
 	const {
 		products,
 		rows,
@@ -29,7 +28,6 @@ export const GridBuilder: React.FC = () => {
 		updateRows,
 	} = useProductGrid(productIds, rowCount);
 
-	// Handle error states
 	if (paramError) {
 		return (
 			<GridErrorState message={paramError} data-testid="grid-error-state" />
@@ -60,14 +58,18 @@ export const GridBuilder: React.FC = () => {
 					</div>
 				)}
 
-				<GridStats
-					totalProducts={products.length}
-					displayedProducts={displayedProductCount}
-					rowCount={rows.length}
-					specifiedRowCount={rowCount}
-					hasLimitedProducts={hasLimitedProducts}
-					data-testid="grid-stats"
-				/>
+				<div className="flex justify-between items-center mb-6">
+					<GridStats
+						totalProducts={products.length}
+						displayedProducts={displayedProductCount}
+						rowCount={rows.length}
+						specifiedRowCount={rowCount}
+						hasLimitedProducts={hasLimitedProducts}
+						data-testid="grid-stats"
+					/>
+					<SaveGridButton rows={rows} />
+				</div>
+
 				<ProductGrid
 					rows={rows}
 					onTemplateChange={updateRowTemplate}

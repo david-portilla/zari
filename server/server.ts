@@ -19,46 +19,37 @@ app.use(express.json());
 
 /**
  * GET /products endpoint
- * Returns product information based on the provided IDs
+ * Returns products by IDs, supports filtering with query parameter
  *
  * @route GET /products
- * @param {string} ids - Query parameter containing product IDs (JSON array or comma-separated string)
- * @returns {Product[]} Array of products matching the provided IDs
+ * @param {string} ids - Comma-separated list of product IDs to filter by
+ * @returns {Product[]} Array of matching products
  * @throws {400} If ids parameter is missing or invalid
  * @throws {500} If server encounters an error
  */
 app.get("/products", (req: Request, res: Response) => {
 	try {
-		const idsParam = req.query.ids as string;
+		const { ids } = req.query;
 
-		if (!idsParam) {
-			return res.status(400).json({
-				error: "Missing required parameter: ids",
-			});
+		// Validate the presence of the ids parameter
+		if (!ids) {
+			return res.status(400).json({ error: "Missing required parameter: ids" });
 		}
 
-		// Parse the ids parameter (format "id1,id2,..." or JSON array)
-		let productIds: string[] = [];
-
-		try {
-			// Try to parse as JSON array
-			productIds = JSON.parse(idsParam);
-		} catch {
-			// If not JSON, try to parse as comma-separated string
-			productIds = idsParam.split(",").map((id) => id.trim());
-		}
-
+		// Parse and validate the ids parameter
+		const productIds = String(ids).split(",");
 		if (!Array.isArray(productIds) || productIds.length === 0) {
 			return res.status(400).json({
-				error: "Invalid ids format. Expected array of product IDs",
+				error: "Invalid ids format. Expected comma-separated product IDs",
 			});
 		}
 
-		// Filter products based on the provided IDs
+		// Filter products by ID
 		const filteredProducts = products.filter((product) =>
 			productIds.includes(product.id)
 		);
 
+		// Return the filtered products
 		res.json(filteredProducts);
 	} catch (error) {
 		console.error("Error in /products endpoint:", error);
@@ -95,6 +86,7 @@ app.get("/templates", (_req: Request, res: Response) => {
  */
 app.post("/grids", (req: Request, res: Response) => {
 	try {
+		console.log("Received grid save request:", req.body);
 		const gridData = req.body as Omit<Grid, "id">;
 
 		// Validate the request body
@@ -132,6 +124,7 @@ app.post("/grids", (req: Request, res: Response) => {
 
 		// Save the grid (in a real app, this would be saved to a database)
 		grids.push(newGrid);
+		console.log("Grid saved successfully:", newGrid);
 
 		res.status(201).json(newGrid);
 	} catch (error) {
@@ -159,5 +152,5 @@ app.get("/grids", (_req: Request, res: Response) => {
 
 // Start the server
 app.listen(PORT, () => {
-	console.log(`Server running on http://localhost:${PORT}`);
+	console.log(`Server running at http://localhost:${PORT}`);
 });

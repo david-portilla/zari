@@ -1,4 +1,3 @@
-import "./App.css";
 import { BrowserRouter } from "react-router";
 import { GridBuilder } from "./components/GridBuilder";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

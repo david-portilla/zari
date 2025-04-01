@@ -1,48 +1,43 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import GridEmptyState from "../GridEmptyState";
+
+// Mock environment variables
+beforeEach(() => {
+	// Set up mock environment variable for testing
+	import.meta.env.VITE_LOCAL_API_URL = "http://localhost:3001";
+});
 
 describe("GridEmptyState", () => {
 	/**
 	 * Test basic rendering
 	 */
-	it("should render empty state message", () => {
-		render(<GridEmptyState />);
+	it("should render the empty state message", () => {
+		render(<GridEmptyState data-testid="grid-empty-state" />);
 
-		// Check if the component renders with the correct test ID
 		expect(screen.getByTestId("grid-empty-state")).toBeInTheDocument();
-
-		// Check if the main heading is rendered
 		expect(screen.getByText("No Products Found")).toBeInTheDocument();
-
-		// Check if the explanation text is rendered
 		expect(
-			screen.getByText("No products were found with the specified IDs.")
+			screen.getByText(
+				"Add product IDs as URL parameters to start building your grid."
+			)
 		).toBeInTheDocument();
-
-		// Check if the help text is rendered
-		expect(
-			screen.getByText(/Please check that server is running/, { exact: false })
-		).toBeInTheDocument();
-
-		// Check if the example link is rendered
-		const exampleLink = screen.getByRole("link");
-		expect(exampleLink).toHaveAttribute(
-			"href",
-			"http://localhost:3001/products?ids=prod_001,prod_002,prod_003"
-		);
-		expect(exampleLink).toHaveAttribute("target", "_blank");
-		expect(exampleLink).toHaveAttribute("rel", "noopener noreferrer");
 	});
 
 	/**
-	 * Test accessibility features
+	 * Test that it includes the API URL example
 	 */
-	it("should have proper accessibility attributes", () => {
-		render(<GridEmptyState />);
+	it("should display the API URL example", () => {
+		render(<GridEmptyState data-testid="grid-empty-state" />);
 
-		// Check if the emoji has proper aria-label
-		const emojiSpan = screen.getByRole("img", { name: "Empty box" });
-		expect(emojiSpan).toBeInTheDocument();
+		const apiUrl = "http://localhost:3001";
+		const link = screen.getByText(
+			`${apiUrl}/products?ids=prod_001,prod_002,prod_003`
+		);
+
+		expect(link).toBeInTheDocument();
+		expect(link.getAttribute("href")).toBe(
+			`${apiUrl}/products?ids=prod_001,prod_002,prod_003`
+		);
 	});
 });
