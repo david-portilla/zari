@@ -17,7 +17,8 @@ export default async function handler(
 ): Promise<void> {
 	// Only allow GET requests
 	if (req.method !== "GET") {
-		return res.status(405).json({ error: "Method not allowed" });
+		res.status(405).json({ error: "Method not allowed" });
+		return;
 	}
 
 	try {
@@ -25,15 +26,17 @@ export default async function handler(
 
 		// Validate the presence of the ids parameter
 		if (!ids) {
-			return res.status(400).json({ error: "Missing required parameter: ids" });
+			res.status(400).json({ error: "Missing required parameter: ids" });
+			return;
 		}
 
 		// Parse and validate the ids parameter
 		const productIds = String(ids).split(",");
 		if (!Array.isArray(productIds) || productIds.length === 0) {
-			return res.status(400).json({
+			res.status(400).json({
 				error: "Invalid ids format. Expected comma-separated product IDs",
 			});
+			return;
 		}
 
 		// Filter products by ID
@@ -46,9 +49,9 @@ export default async function handler(
 		res.setHeader("Access-Control-Allow-Methods", "GET");
 
 		// Return the filtered products
-		return res.status(200).json(filteredProducts);
+		res.status(200).json(filteredProducts);
 	} catch (error) {
 		console.error("Error in /api/products endpoint:", error);
-		return res.status(500).json({ error: "Internal server error" });
+		res.status(500).json({ error: "Internal server error" });
 	}
 }
