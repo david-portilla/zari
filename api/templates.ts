@@ -17,7 +17,8 @@ export default async function handler(
 ): Promise<void> {
 	// Only allow GET requests
 	if (req.method !== "GET") {
-		return res.status(405).json({ error: "Method not allowed" });
+		res.status(405).json({ error: "Method not allowed" });
+		return;
 	}
 
 	try {
@@ -26,9 +27,9 @@ export default async function handler(
 		res.setHeader("Access-Control-Allow-Methods", "GET");
 
 		// Return all templates
-		return res.status(200).json(templates);
+		res.status(200).json(templates);
 	} catch (error) {
 		console.error("Error in /api/templates endpoint:", error);
-		return res.status(500).json({ error: "Internal server error" });
+		res.status(500).json({ error: "Internal server error" });
 	}
 }

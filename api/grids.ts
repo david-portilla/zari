@@ -24,16 +24,19 @@ export default async function handler(
 
 	// Handle preflight requests
 	if (req.method === "OPTIONS") {
-		return res.status(200).end();
+		res.status(200).end();
+		return;
 	}
 
 	// Handle GET request to fetch all grids
 	if (req.method === "GET") {
 		try {
-			return res.status(200).json(grids);
+			res.status(200).json(grids);
+			return;
 		} catch (error) {
 			console.error("Error in GET /api/grids endpoint:", error);
-			return res.status(500).json({ error: "Internal server error" });
+			res.status(500).json({ error: "Internal server error" });
+			return;
 		}
 	}
 
@@ -45,9 +48,10 @@ export default async function handler(
 
 			// Validate the request body
 			if (!gridData || !gridData.name || !Array.isArray(gridData.rows)) {
-				return res.status(400).json({
+				res.status(400).json({
 					error: "Invalid grid data. Required fields: name, rows",
 				});
+				return;
 			}
 
 			// Validate that all rows have a templateId and products
@@ -60,10 +64,11 @@ export default async function handler(
 			);
 
 			if (invalidRow) {
-				return res.status(400).json({
+				res.status(400).json({
 					error:
 						"Invalid row data. Each row must have a templateId and 1-3 products",
 				});
+				return;
 			}
 
 			// Create a new grid with a unique ID
@@ -82,13 +87,15 @@ export default async function handler(
 			grids.push(newGrid);
 			console.log("Grid saved successfully:", newGrid);
 
-			return res.status(201).json(newGrid);
+			res.status(201).json(newGrid);
+			return;
 		} catch (error) {
 			console.error("Error in POST /api/grids endpoint:", error);
-			return res.status(500).json({ error: "Internal server error" });
+			res.status(500).json({ error: "Internal server error" });
+			return;
 		}
 	}
 
 	// If we reach here, the HTTP method is not supported
-	return res.status(405).json({ error: "Method not allowed" });
+	res.status(405).json({ error: "Method not allowed" });
 }

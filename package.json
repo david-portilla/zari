@@ -14,12 +14,12 @@
 	"dependencies": {
 		"@tailwindcss/vite": "^4.0.17",
 		"@tanstack/react-query": "^5.71.1",
+		"@vercel/node": "^3.2.29",
+		"cors": "^2.8.5",
+		"express": "^4.18.2",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
 		"tailwindcss": "^4.0.17",
-		"@vercel/node": "^3.0.7",
-		"cors": "^2.8.5",
-		"express": "^4.18.2",
 		"uuid": "^11.1.0"
 	},
 	"devDependencies": {
