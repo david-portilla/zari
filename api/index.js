@@ -5,13 +5,12 @@
  * @module server
  */
 
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import { v4 as uuidv4 } from "uuid";
-import { products, templates, grids, Grid } from "./mockData";
+import { products, templates, grids } from "./mockData.js";
 
 const app = express();
-const PORT = 3001;
 
 // Middleware configuration
 app.use(cors());
@@ -27,7 +26,7 @@ app.use(express.json());
  * @throws {400} If ids parameter is missing or invalid
  * @throws {500} If server encounters an error
  */
-app.get("/products", (req: Request, res: Response) => {
+app.get("/products", (req, res) => {
 	try {
 		const { ids } = req.query;
 
@@ -65,7 +64,7 @@ app.get("/products", (req: Request, res: Response) => {
  * @returns {Template[]} Array of all available templates
  * @throws {500} If server encounters an error
  */
-app.get("/templates", (_req: Request, res: Response) => {
+app.get("/templates", (req, res) => {
 	try {
 		res.json(templates);
 	} catch (error) {
@@ -84,10 +83,10 @@ app.get("/templates", (_req: Request, res: Response) => {
  * @throws {400} If grid data is invalid or missing required fields
  * @throws {500} If server encounters an error
  */
-app.post("/grids", (req: Request, res: Response) => {
+app.post("/grids", (req, res) => {
 	try {
 		console.log("Received grid save request:", req.body);
-		const gridData = req.body as Omit<Grid, "id">;
+		const gridData = req.body;
 
 		// Validate the request body
 		if (!gridData || !gridData.name || !Array.isArray(gridData.rows)) {
@@ -113,7 +112,7 @@ app.post("/grids", (req: Request, res: Response) => {
 		}
 
 		// Create a new grid with a unique ID
-		const newGrid: Grid = {
+		const newGrid = {
 			id: uuidv4(),
 			name: gridData.name,
 			rows: gridData.rows.map((row) => ({
@@ -141,7 +140,7 @@ app.post("/grids", (req: Request, res: Response) => {
  * @returns {Grid[]} Array of all saved grids
  * @throws {500} If server encounters an error
  */
-app.get("/grids", (_req: Request, res: Response) => {
+app.get("/grids", (req, res) => {
 	try {
 		res.json(grids);
 	} catch (error) {
@@ -150,9 +149,5 @@ app.get("/grids", (_req: Request, res: Response) => {
 	}
 });
 
-// Start the server
-app.listen(PORT, () => {
-	console.log(`Server running at http://localhost:${PORT}`);
-});
-
+// Export the Express app for Vercel
 export default app;

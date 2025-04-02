@@ -6,70 +6,11 @@
  */
 
 /**
- * Represents a product in the store
- * @interface Product
- * @property {string} id - Unique identifier for the product
- * @property {string} name - Name of the product
- * @property {string} image - URL of the product image
- * @property {Object} price - Price information
- * @property {number} price.amount - Price amount
- * @property {string} price.currency - Currency code (e.g., EUR)
- */
-export interface Product {
-	id: string;
-	name: string;
-	image: string;
-	price: {
-		amount: number;
-		currency: string;
-	};
-}
-
-/**
- * Represents a template for row alignment
- * @interface Template
- * @property {string} id - Unique identifier for the template
- * @property {string} name - Display name of the template
- * @property {("LEFT"|"CENTER"|"RIGHT")} alignment - Alignment type for the row
- */
-export interface Template {
-	id: string;
-	name: string;
-	alignment: "LEFT" | "CENTER" | "RIGHT";
-}
-
-/**
- * Represents a grid configuration
- * @interface Grid
- * @property {string} id - Unique identifier for the grid
- * @property {string} name - Display name of the grid
- * @property {Row[]} rows - Array of rows in the grid
- */
-export interface Grid {
-	id: string;
-	name: string;
-	rows: Row[];
-}
-
-/**
- * Represents a row in a grid
- * @interface Row
- * @property {string} id - Unique identifier for the row
- * @property {string} templateId - ID of the template to apply
- * @property {string[]} products - Array of product IDs in the row (1-3 products)
- */
-export interface Row {
-	id: string;
-	templateId: string;
-	products: string[]; // Product IDs
-}
-
-/**
  * Mock product data
  * Contains a variety of clothing and accessories
  * @constant {Product[]}
  */
-export const products: Product[] = [
+export const products = [
 	{
 		id: "prod_001",
 		name: "Blue Jean",
@@ -167,7 +108,7 @@ export const products: Product[] = [
  * Defines available row alignment options
  * @constant {Template[]}
  */
-export const templates: Template[] = [
+export const templates = [
 	{
 		id: "template_001",
 		name: "Aesthetic Left",
@@ -192,4 +133,4 @@ export const templates: Template[] = [
  * In production, this should be replaced with a database
  * @constant {Grid[]}
  */
-export const grids: Grid[] = [];
+export const grids = [];

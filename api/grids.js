@@ -2,8 +2,7 @@
  * API endpoint for managing grid configurations
  * Vercel serverless function for the /api/grids endpoint
  */
-import { VercelRequest, VercelResponse } from "@vercel/node";
-import { grids, Grid } from "./_mockData";
+import { grids } from "./mockData.js";
 import { v4 as uuidv4 } from "uuid";
 
 /**
@@ -13,10 +12,7 @@ import { v4 as uuidv4 } from "uuid";
  * @param {VercelResponse} res - The response object
  * @returns {Promise<void>}
  */
-export default async function handler(
-	req: VercelRequest,
-	res: VercelResponse
-): Promise<void> {
+export default async function handler(req, res) {
 	// Set CORS headers
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -44,7 +40,7 @@ export default async function handler(
 	if (req.method === "POST") {
 		try {
 			console.log("Received grid save request:", req.body);
-			const gridData = req.body as Omit<Grid, "id">;
+			const gridData = req.body;
 
 			// Validate the request body
 			if (!gridData || !gridData.name || !Array.isArray(gridData.rows)) {
@@ -72,7 +68,7 @@ export default async function handler(
 			}
 
 			// Create a new grid with a unique ID
-			const newGrid: Grid = {
+			const newGrid = {
 				id: uuidv4(),
 				name: gridData.name,
 				rows: gridData.rows.map((row) => ({

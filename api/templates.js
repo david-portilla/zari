@@ -2,8 +2,7 @@
  * API endpoint for getting all available templates
  * Vercel serverless function for the /api/templates endpoint
  */
-import { VercelRequest, VercelResponse } from "@vercel/node";
-import { templates } from "./_mockData";
+import { templates } from "./mockData.js";
 
 /**
  * Handle GET request to retrieve all available templates
@@ -11,10 +10,7 @@ import { templates } from "./_mockData";
  * @param {VercelResponse} res - The response object
  * @returns {Promise<void>}
  */
-export default async function handler(
-	req: VercelRequest,
-	res: VercelResponse
-): Promise<void> {
+export default async function handler(req, res) {
 	// Only allow GET requests
 	if (req.method !== "GET") {
 		res.status(405).json({ error: "Method not allowed" });

@@ -1,6 +1,6 @@
 import { Product } from "../types";
 
-const API_URL = import.meta.env.VITE_LOCAL_API_URL || "http://localhost:3001";
+const API_URL = import.meta.env.VITE_LOCAL_API_URL;
 
 /**
  * Fetches products from the backend API based on provided product IDs

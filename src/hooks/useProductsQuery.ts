@@ -16,7 +16,7 @@ const fetchProducts = async (
 ): Promise<ProductsApiResponse> => {
 	if (!productIds.length) return [];
 
-	const apiUrl = import.meta.env.VITE_LOCAL_API_URL || "http://localhost:3001";
+	const apiUrl = import.meta.env.VITE_LOCAL_API_URL;
 	const url = `${apiUrl}/products?ids=${productIds}`;
 
 	try {
